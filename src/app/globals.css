@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #05040a;
+  --foreground: #f8fafc;
 }
 
 @theme inline {
@@ -12,15 +12,166 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(168, 85, 247, 0.55);
+  color: #fff;
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(0, -8px, 0) rotate(0.6deg);
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-120%) skewX(-18deg);
+  }
+  100% {
+    transform: translateX(220%) skewX(-18deg);
+  }
+}
+
+.animated-mesh {
+  background:
+    radial-gradient(circle at 12% 12%, rgba(34, 211, 238, 0.42), transparent 30%),
+    radial-gradient(circle at 80% 10%, rgba(244, 114, 182, 0.42), transparent 30%),
+    radial-gradient(circle at 52% 78%, rgba(168, 85, 247, 0.36), transparent 34%),
+    linear-gradient(135deg, #05040a 0%, #10112a 42%, #07050f 100%);
+}
+
+.aurora {
+  position: absolute;
+  inset: -8%;
+  background: linear-gradient(
+    115deg,
+    rgba(34, 211, 238, 0.22),
+    rgba(168, 85, 247, 0.24),
+    rgba(244, 114, 182, 0.2),
+    rgba(251, 191, 36, 0.12)
+  );
+  background-size: 180% 180%;
+  filter: blur(18px);
+  opacity: 0.72;
+  pointer-events: none;
+}
+
+.noise-overlay {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(circle at center, black, transparent 78%);
+}
+
+.glass-card {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.08)
+  );
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, #67e8f9, #c084fc, #f9a8d4, #fde68a);
+  background-size: 240% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradient-shift 7s ease infinite;
+}
+
+.glow-button {
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 16px 40px rgba(168, 85, 247, 0.38),
+    0 0 0 1px rgba(255, 255, 255, 0.12) inset;
+}
+
+.glow-button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.glow-button:hover::after {
+  opacity: 1;
+  animation: shine 1.2s ease-out;
+}
+
+.float-soft {
+  animation: float-soft 9s ease-in-out infinite;
+}
+
+.marquee-track {
+  width: max-content;
+  animation: marquee 42s linear infinite;
+}
+
+.pulse-glow {
+  opacity: 0.65;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
