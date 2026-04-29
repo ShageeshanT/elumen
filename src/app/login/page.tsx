@@ -3,85 +3,126 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
+import { ArrowLeft, ArrowUpRight } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    const r = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-    if (!r.ok) {
-      setError("Credentials did not match. Try again.");
-      return;
+    setLoading(true);
+    try {
+      const supabase = createSupabaseBrowserClient();
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (signInError) {
+        setError(signInError.message);
+        setLoading(false);
+        return;
+      }
+
+      await fetch("/api/onboarding/bootstrap", { method: "POST" });
+      router.push("/dashboard");
+      router.refresh();
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Unable to sign in. Check Supabase configuration.",
+      );
+      setLoading(false);
     }
-    router.push("/dashboard");
   }
 
   return (
-    <div className="animated-mesh relative flex min-h-screen items-center justify-center overflow-hidden px-4 text-white">
-      <div className="aurora" />
-      <div className="noise-overlay absolute inset-0 opacity-60" />
-      <div className="absolute left-[12%] top-[18%] h-44 w-44 rounded-full bg-cyan-300/20 blur-xl pulse-glow" />
-      <div className="glass-card relative w-full max-w-md space-y-7 rounded-[2rem] p-8">
-        <div>
-          <p className="mb-3 text-xs font-black uppercase tracking-[0.28em] text-cyan-100">
-            Welcome back
-          </p>
-          <h1 className="text-3xl font-black tracking-tight">
-            Sign in to <span className="gradient-text">Elumen</span>
-          </h1>
-          <p className="mt-2 text-sm text-white/60">
+    <main className="grain relative min-h-screen flex items-center justify-center px-4 py-12 overflow-hidden">
+      <div className="aurora-bg absolute inset-0 -z-10" />
+      <div className="absolute inset-0 dot-grid opacity-40 -z-10" />
+
+      <div className="relative z-10 w-full max-w-md">
+        <Link
+          href="/"
+          className="mb-6 inline-flex items-center gap-2 text-sm text-[var(--fg-muted)] hover:text-[var(--fg)]"
+        >
+          <ArrowLeft size={14} /> Back home
+        </Link>
+
+        <div className="surface p-8">
+          <div className="flex items-center gap-3 mb-7">
+            <span className="grid h-10 w-10 place-items-center rounded-lg bg-[var(--accent)] text-[var(--bg)] text-sm font-bold">
+              E
+            </span>
+            <div>
+              <h1 className="text-2xl headline">Welcome back</h1>
+              <p className="text-sm text-[var(--fg-dim)]">
+                Sign in to your dashboard
+              </p>
+            </div>
+          </div>
+
+          <form onSubmit={submit} className="space-y-4">
+            <label className="block">
+              <span className="mb-1.5 block text-xs font-medium text-[var(--fg-muted)] uppercase tracking-wider">
+                Email
+              </span>
+              <input
+                className="input"
+                type="email"
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@company.com"
+                required
+              />
+            </label>
+            <label className="block">
+              <span className="mb-1.5 block text-xs font-medium text-[var(--fg-muted)] uppercase tracking-wider">
+                Password
+              </span>
+              <input
+                className="input"
+                type="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+              />
+            </label>
+            {error && (
+              <p className="rounded-lg border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-300">
+                {error}
+              </p>
+            )}
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn btn-primary w-full"
+            >
+              {loading ? "Signing in…" : (<>Sign in <ArrowUpRight size={14} /></>)}
+            </button>
+          </form>
+
+          <p className="mt-6 text-center text-sm text-[var(--fg-muted)]">
             New here?{" "}
-            <Link href="/register" className="font-bold text-cyan-200 underline">
+            <Link
+              href="/register"
+              className="font-medium text-[var(--accent)] hover:underline"
+            >
               Create an account
             </Link>
           </p>
         </div>
-        <form onSubmit={submit} className="space-y-4">
-          <label className="block space-y-1">
-            <span className="text-sm font-medium text-white/70">Email</span>
-            <input
-              className="w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-white outline-none transition placeholder:text-white/30 focus:border-cyan-200/70 focus:bg-white/15"
-              type="email"
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </label>
-          <label className="block space-y-1">
-            <span className="text-sm font-medium text-white/70">Password</span>
-            <input
-              className="w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-white outline-none transition placeholder:text-white/30 focus:border-fuchsia-200/70 focus:bg-white/15"
-              type="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </label>
-          {error && (
-            <p className="rounded-2xl border border-red-300/20 bg-red-500/10 px-4 py-3 text-sm text-red-100">
-              {error}
-            </p>
-          )}
-          <button
-            type="submit"
-            className="glow-button w-full rounded-full bg-gradient-to-r from-cyan-300 via-fuchsia-300 to-amber-200 py-3 text-sm font-black text-zinc-950 transition hover:scale-[1.02]"
-          >
-            Continue
-          </button>
-        </form>
       </div>
-    </div>
+    </main>
   );
 }
-

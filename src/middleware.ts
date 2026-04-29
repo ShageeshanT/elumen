@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { readSessionPayload, SESSION_COOKIE_NAME } from "@/lib/auth/session";
+import { hasSupabaseBrowserEnv } from "@/lib/supabase/config";
+import { updateSupabaseSession } from "@/lib/supabase/middleware";
 
 /** Simple in-memory rate limit (resets per deploy; replace with Redis in prod). */
 
@@ -30,12 +31,19 @@ export async function middleware(request: NextRequest) {
   }
 
   const { pathname } = request.nextUrl;
+  let response = NextResponse.next();
+  let authed = false;
+
+  if (hasSupabaseBrowserEnv()) {
+    const session = await updateSupabaseSession(request);
+    response = session.response;
+    authed = Boolean(session.user);
+  }
+
   const isProtected = pathname.startsWith("/dashboard");
 
   if (isProtected) {
-    const tok = request.cookies.get(SESSION_COOKIE_NAME)?.value;
-    const sess = await readSessionPayload(tok);
-    if (!sess?.userId) {
+    if (!authed) {
       const login = new URL("/login", request.url);
       login.searchParams.set("next", pathname);
       return NextResponse.redirect(login);
@@ -44,14 +52,12 @@ export async function middleware(request: NextRequest) {
 
   const isAuthPages = pathname === "/login" || pathname === "/register";
   if (isAuthPages) {
-    const tok = request.cookies.get(SESSION_COOKIE_NAME)?.value;
-    const sess = await readSessionPayload(tok);
-    if (sess?.userId) {
+    if (authed) {
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
   }
 
-  return NextResponse.next();
+  return response;
 }
 
 export const config = {

@@ -1,188 +1,213 @@
 import Link from "next/link";
+import { HeroScape } from "@/components/landing/HeroScape";
+import { CalendarMockup, ChatMockup, TaskListMockup } from "@/components/landing/Mockups";
+import { FAQ, Marquee, Reveal } from "@/components/landing/Sections";
+import { ArrowUpRight, CheckCircle2 } from "lucide-react";
 
-const productCards = [
+const tools = [
+  "WhatsApp", "Gmail", "Slack", "Calendar", "Notion",
+  "Linear", "GitHub", "Stripe", "HubSpot", "Sheets",
+];
+
+const features = [
   {
-    eyebrow: "Build",
-    title: "No-code agent studio",
-    body: "Create support, lead capture, booking, and internal ops agents with plain-language rules.",
-    color: "from-cyan-400/30 to-blue-500/20",
+    title: "Text it like a teammate",
+    body: "Users message the assistant in plain language through WhatsApp. No command syntax, no setup screens.",
+    Mockup: ChatMockup,
   },
   {
-    eyebrow: "Connect",
-    title: "Tools and WhatsApp",
-    body: "Link chat, Gmail, Sheets, CRMs, calendars, and more while hiding the technical stack.",
-    color: "from-fuchsia-400/30 to-purple-500/20",
+    title: "It actually does the work",
+    body: "Your agent can follow up, draft, schedule, summarize, and trigger actions across connected tools.",
+    Mockup: TaskListMockup,
   },
   {
-    eyebrow: "Monetize",
-    title: "Credits that make sense",
-    body: "Users top up from the dashboard and see automation usage without model-provider jargon.",
-    color: "from-amber-300/30 to-pink-500/20",
+    title: "Calendar and coordination",
+    body: "Find open slots, send invites, remind people, and keep tasks moving without exposing the tech stack.",
+    Mockup: CalendarMockup,
   },
 ];
 
-const marqueeItems = [
-  "WhatsApp replies",
-  "Gmail workflows",
-  "Lead capture",
-  "Human handoff",
+const planHighlights = [
+  "WhatsApp connection",
+  "Tool integrations",
   "Credit wallet",
-  "Tool permissions",
-  "Hidden runtime",
-  "Agent templates",
+  "Private backend stack",
 ];
 
 export default function Home() {
   return (
-    <main className="animated-mesh relative min-h-screen overflow-hidden text-white">
-      <div className="aurora" />
-      <div className="noise-overlay absolute inset-0 opacity-60" />
-      <div className="absolute left-8 top-28 h-32 w-32 rounded-full bg-cyan-300/25 blur-xl pulse-glow" />
-      <div className="absolute bottom-24 right-8 h-48 w-48 rounded-full bg-fuchsia-400/20 blur-xl pulse-glow" />
+    <>
+      <HeroScape />
 
-      <div className="relative mx-auto flex max-w-7xl flex-col gap-16 px-6 py-8 sm:px-10 lg:px-12">
-        <nav className="glass-card flex items-center justify-between rounded-full px-4 py-3">
-          <Link href="/" className="flex items-center gap-3">
-            <span className="grid h-9 w-9 place-items-center rounded-full bg-white text-sm font-black text-zinc-950">
-              E
-            </span>
-            <span className="font-semibold tracking-tight">Elumen</span>
-          </Link>
-          <div className="hidden items-center gap-6 text-sm text-white/70 md:flex">
-            <span>Agents</span>
-            <span>Connections</span>
-            <span>Credits</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Link
-              className="rounded-full px-4 py-2 text-sm font-medium text-white/80 transition hover:text-white"
-              href="/login"
-            >
-              Log in
-            </Link>
-            <Link
-              className="glow-button rounded-full bg-white px-5 py-2 text-sm font-bold text-zinc-950 transition hover:scale-[1.03]"
-              href="/register"
-            >
-              Get started
-            </Link>
-          </div>
-        </nav>
+      <main className="grain relative z-10 min-h-screen overflow-hidden bg-[var(--bg)]">
+        <div className="relative">
+          <div
+            className="aurora-bg pointer-events-none absolute inset-0 -z-10 opacity-50"
+            aria-hidden
+          />
+          <div className="relative z-10 mx-auto max-w-6xl px-5 pb-24 pt-20 sm:px-8 sm:pt-24">
+            <Reveal>
+              <section className="mx-auto max-w-2xl text-center">
+                <p className="pill mb-5">How it works</p>
+                <h2 className="headline text-4xl sm:text-6xl">
+                  Simple on the outside.
+                  <br />
+                  Powerful underneath.
+                </h2>
+                <p className="mt-5 text-[var(--fg-muted)] leading-relaxed">
+                  Elumen hides the backend complexity and gives non-technical
+                  users one clean way to launch, connect, and manage agents.
+                </p>
+              </section>
+            </Reveal>
 
-        <section className="grid items-center gap-10 py-10 lg:grid-cols-[1.02fr_0.98fr] lg:py-16">
-          <div className="space-y-8">
-            <div className="inline-flex rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.24em] text-cyan-100 ">
-              All-in-one agent platform
-            </div>
-            <div className="space-y-5">
-              <h1 className="max-w-4xl text-5xl font-black tracking-[-0.06em] text-white sm:text-7xl lg:text-8xl">
-                Build your own <span className="gradient-text">AI bot</span>{" "}
-                without touching code.
-              </h1>
-              <p className="max-w-2xl text-lg leading-8 text-white/68 sm:text-xl">
-                Non-technical users can launch agents, link WhatsApp and other
-                tools, buy credits, and run everything from one loud, simple,
-                beautiful dashboard.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <Link
-                className="glow-button rounded-full bg-gradient-to-r from-cyan-300 via-fuchsia-300 to-amber-200 px-7 py-3 text-sm font-black text-zinc-950 transition hover:scale-[1.03]"
-                href="/register"
-              >
-                Create your first agent
-              </Link>
-              <Link
-                className="rounded-full border border-white/15 bg-white/10 px-7 py-3 text-sm font-bold text-white shadow-2xl  transition hover:bg-white/15"
-                href="/login"
-              >
-                Open dashboard
-              </Link>
-            </div>
-          </div>
+            <section id="features" className="mt-14 grid gap-5 lg:grid-cols-3">
+            {features.map((f, i) => {
+              const M = f.Mockup;
+              return (
+                <Reveal key={f.title} delay={i * 0.05}>
+                  <article className="surface flex h-full flex-col overflow-hidden p-5 sm:p-6">
+                    <div className="mb-5">
+                      <h3 className="text-2xl headline mb-3">{f.title}</h3>
+                      <p className="text-[var(--fg-muted)] leading-relaxed">
+                        {f.body}
+                      </p>
+                    </div>
+                    <div className="mt-auto min-h-[280px]">
+                      <M />
+                    </div>
+                  </article>
+                </Reveal>
+              );
+            })}
+            </section>
 
-          <div className="relative min-h-[560px]">
-            <div className="float-soft glass-card absolute right-0 top-0 w-full max-w-md rounded-[2rem] p-5">
-              <div className="rounded-[1.5rem] bg-zinc-950/70 p-4 shadow-inner">
-                <div className="mb-5 flex items-center justify-between">
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.2em] text-white/40">
-                      Agent live
-                    </p>
-                    <h2 className="text-xl font-bold">Reception Bot</h2>
-                  </div>
-                  <span className="rounded-full bg-emerald-400/15 px-3 py-1 text-xs font-bold text-emerald-200">
-                    Active
-                  </span>
-                </div>
-                {[
-                  ["WhatsApp", "42 chats handled", "bg-emerald-400"],
-                  ["Gmail", "12 leads summarized", "bg-sky-400"],
-                  ["Credits", "4,928 remaining", "bg-fuchsia-400"],
-                ].map(([title, body, color]) => (
-                  <div
-                    key={title}
-                    className="mb-3 flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.06] p-3"
-                  >
-                    <span className={`h-3 w-3 rounded-full ${color}`} />
+            <Reveal>
+              <section id="integrations" className="py-20 sm:py-28">
+                <div className="surface overflow-hidden p-7 sm:p-10">
+                  <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
                     <div>
-                      <p className="font-semibold">{title}</p>
-                      <p className="text-sm text-white/50">{body}</p>
+                      <p className="pill mb-5">Integrations</p>
+                      <h2 className="headline text-3xl sm:text-5xl">
+                        Connect the tools people already use.
+                      </h2>
+                      <p className="mt-5 text-[var(--fg-muted)] leading-relaxed">
+                        WhatsApp, email, calendars, docs, CRMs, payments, and
+                        project tools — connected through one product experience.
+                      </p>
+                    </div>
+                    <div>
+                      <Marquee items={tools} />
+                      <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3">
+                        {tools.slice(0, 6).map((tool) => (
+                          <div
+                            key={tool}
+                            className="surface-soft px-4 py-3 text-sm text-[var(--fg-muted)]"
+                          >
+                            {tool}
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                ))}
-              </div>
-            </div>
-            <div className="glass-card absolute bottom-6 left-0 w-[78%] rounded-[1.7rem] p-5 float-soft [animation-delay:1.2s]">
-              <p className="text-xs font-bold uppercase tracking-[0.24em] text-fuchsia-100">
-                User prompt
-              </p>
-              <p className="mt-3 text-2xl font-black tracking-tight">
-                &ldquo;Reply to every new buyer, save details to Sheets, and
-                ping me only when it is urgent.&rdquo;
-              </p>
-            </div>
-          </div>
-        </section>
+                </div>
+              </section>
+            </Reveal>
 
-        <div className="-mx-6 overflow-hidden border-y border-white/10 bg-white/[0.06] py-4  sm:-mx-10 lg:-mx-12">
-          <div className="marquee-track flex gap-3 px-3">
-            {[...marqueeItems, ...marqueeItems].map((item, index) => (
-              <span
-                key={`${item}-${index}`}
-                className="rounded-full border border-white/10 bg-white/10 px-5 py-2 text-sm font-bold text-white/80"
-              >
-                {item}
-              </span>
-            ))}
-          </div>
-        </div>
+            <Reveal>
+              <section id="pricing" className="pb-20 sm:pb-28">
+                <div className="surface grid gap-8 p-7 sm:p-10 lg:grid-cols-[1fr_0.9fr] lg:items-center">
+                  <div>
+                    <p className="pill mb-5">Pricing</p>
+                    <h2 className="headline text-3xl sm:text-5xl">
+                      Start small.
+                      <br />
+                      Scale with credits.
+                    </h2>
+                    <p className="mt-5 max-w-xl text-[var(--fg-muted)] leading-relaxed">
+                      Keep it simple for non-technical users: one workspace, a
+                      credit wallet, and optional paid upgrades when usage grows.
+                    </p>
+                  </div>
+                  <div className="surface-soft p-6">
+                    <p className="text-sm text-[var(--fg-muted)]">Starter</p>
+                    <p className="mt-2 text-5xl headline">$0</p>
+                    <p className="mt-3 text-sm text-[var(--fg-muted)]">
+                      Launch your first agent and test WhatsApp workflows.
+                    </p>
+                    <ul className="mt-6 space-y-3">
+                      {planHighlights.map((item) => (
+                      <li
+                        key={item}
+                        className="flex items-center gap-2 text-sm text-[var(--fg-muted)]"
+                      >
+                        <CheckCircle2 size={15} className="text-[var(--accent)]" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                    <Link href="/register" className="btn btn-primary mt-7 w-full">
+                      Get started <ArrowUpRight size={14} />
+                    </Link>
+                  </div>
+                </div>
+              </section>
+            </Reveal>
 
-        <section className="grid gap-5 pb-20 md:grid-cols-3">
-          {productCards.map((card) => (
-            <article
-              key={card.title}
-              className="group glass-card relative overflow-hidden rounded-[1.7rem] p-6 transition duration-300 hover:-translate-y-2"
-            >
-              <div
-                className={`absolute inset-0 bg-gradient-to-br ${card.color} opacity-70 transition group-hover:opacity-100`}
-              />
-              <div className="relative">
-                <p className="text-xs font-black uppercase tracking-[0.24em] text-white/55">
-                  {card.eyebrow}
-                </p>
-                <h2 className="mt-8 text-2xl font-black tracking-tight">
-                  {card.title}
+            <section id="faq" className="pb-20 sm:pb-28">
+              <Reveal>
+                <div className="mx-auto mb-10 max-w-2xl text-center">
+                  <p className="pill mb-5">FAQ</p>
+                  <h2 className="headline text-4xl sm:text-5xl">
+                    Quick answers.
+                  </h2>
+                </div>
+              </Reveal>
+              <Reveal>
+                <FAQ />
+              </Reveal>
+            </section>
+
+            <Reveal>
+              <section className="surface relative overflow-hidden p-8 text-center sm:p-14">
+                <div className="aurora-bg absolute inset-0 -z-10 opacity-60" />
+                <h2 className="headline text-4xl sm:text-6xl">
+                  Launch your first agent.
                 </h2>
-                <p className="mt-3 text-sm leading-6 text-white/65">
-                  {card.body}
+                <p className="mx-auto mt-5 max-w-xl text-[var(--fg-muted)] leading-relaxed">
+                  Keep the product beautiful and the complicated backend hidden.
                 </p>
-              </div>
-            </article>
-          ))}
-        </section>
+                <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+                  <Link href="/register" className="btn btn-primary">
+                    Start free <ArrowUpRight size={14} />
+                  </Link>
+                  <Link href="/login" className="btn btn-ghost">
+                    Sign in
+                  </Link>
+                </div>
+              </section>
+            </Reveal>
+
+        <footer className="mt-20 py-10 border-t border-[var(--border)] text-sm text-[var(--fg-dim)]">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2.5">
+              <span className="grid h-7 w-7 place-items-center rounded-md bg-[var(--accent)] text-[var(--bg)] font-bold text-xs">
+                E
+              </span>
+              <span>Elumen</span>
+              <span>·</span>
+              <span>© 2026</span>
+            </div>
+            <div className="flex items-center gap-5">
+              <a href="#" className="hover:text-[var(--fg)]">Privacy</a>
+              <a href="#" className="hover:text-[var(--fg)]">Terms</a>
+              <a href="#" className="hover:text-[var(--fg)]">Status</a>
+            </div>
+          </div>
+        </footer>
+      </div>
       </div>
     </main>
+    </>
   );
 }
-

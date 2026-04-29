@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ArrowUpRight, Check } from "lucide-react";
 
 export default function BillingPage() {
   const [msg, setMsg] = useState<string | null>(null);
@@ -26,59 +27,56 @@ export default function BillingPage() {
   }
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8">
-      <section className="glass-card relative overflow-hidden rounded-[2rem] p-8">
-        <div className="absolute -right-6 top-6 h-40 w-40 rounded-full bg-amber-300/20 blur-xl pulse-glow" />
-        <p className="text-xs font-black uppercase tracking-[0.28em] text-amber-100">
-          Credits wallet
-        </p>
-        <h1 className="mt-4 max-w-2xl text-4xl font-black tracking-[-0.04em] sm:text-5xl">
-          Buy credits. Keep agents running.
+    <div className="mx-auto max-w-5xl space-y-6">
+      <section className="surface relative overflow-hidden p-7 sm:p-9">
+        <div className="aurora-bg absolute inset-0 -z-10 opacity-40" />
+        <span className="pill pill-accent mb-4">Credits wallet</span>
+        <h1 className="headline text-3xl sm:text-5xl">
+          Buy credits.<br />
+          <span className="text-[var(--accent)]">Keep agents running.</span>
         </h1>
-        <p className="mt-4 max-w-2xl text-sm leading-6 text-white/60">
-          Purchase automation credits with Stripe Checkout. Webhooks top up your
-          tenant wallet when payment succeeds.
+        <p className="mt-4 max-w-2xl text-[var(--fg-muted)] leading-relaxed">
+          Purchase automation credits with Stripe Checkout. Your wallet tops up
+          automatically when payment succeeds.
         </p>
       </section>
+
       {msg && (
-        <p className="glass-card rounded-2xl px-4 py-3 text-sm text-amber-100">
+        <p className="surface px-4 py-3 text-sm text-amber-300 border-amber-500/30">
           {msg}
         </p>
       )}
-      <section className="grid gap-6 md:grid-cols-[1fr_0.85fr]">
-        <article className="glass-card relative overflow-hidden rounded-[2rem] p-6">
-          <div className="absolute inset-0 bg-gradient-to-br from-cyan-300/12 via-transparent to-fuchsia-300/12" />
-          <div className="relative">
-            <p className="text-xs font-black uppercase tracking-[0.24em] text-white/45">
-              Starter pack
-            </p>
-            <div className="mt-6 flex items-end gap-2">
-              <span className="font-mono text-6xl font-black gradient-text">
-                5,000
-              </span>
-              <span className="pb-2 text-sm font-bold text-white/50">
-                credits
-              </span>
-            </div>
-            <p className="mt-4 max-w-md text-sm leading-6 text-white/58">
-              Good for testing replies, connected-tool calls, and early customer
-              workflows before you tune pricing.
-            </p>
-            <button
-              type="button"
-              disabled={loading}
-              onClick={() => void checkout()}
-              className="glow-button mt-6 rounded-full bg-gradient-to-r from-cyan-300 via-fuchsia-300 to-amber-200 px-7 py-3 text-sm font-black text-zinc-950 transition hover:scale-[1.03] disabled:opacity-60"
-            >
-              {loading ? "Redirecting..." : "Buy credits pack"}
-            </button>
+
+      <section className="grid gap-5 md:grid-cols-[1fr_0.85fr]">
+        <article className="surface p-7">
+          <p className="text-xs uppercase tracking-wider text-[var(--fg-dim)]">
+            Starter pack
+          </p>
+          <div className="mt-4 flex items-end gap-2">
+            <span className="font-mono text-6xl headline tabular-nums">
+              5,000
+            </span>
+            <span className="pb-2 text-sm text-[var(--fg-muted)]">credits</span>
           </div>
+          <p className="mt-4 max-w-md text-sm leading-relaxed text-[var(--fg-muted)]">
+            Good for testing replies, connected-tool calls, and early customer
+            workflows before you tune pricing.
+          </p>
+          <button
+            type="button"
+            disabled={loading}
+            onClick={() => void checkout()}
+            className="btn btn-accent mt-6"
+          >
+            {loading ? "Redirecting…" : (<>Buy credits pack <ArrowUpRight size={14} /></>)}
+          </button>
         </article>
-        <article className="glass-card rounded-[2rem] p-6">
-          <p className="text-xs font-black uppercase tracking-[0.24em] text-white/45">
+
+        <article className="surface p-7">
+          <p className="text-xs uppercase tracking-wider text-[var(--fg-dim)]">
             Setup checklist
           </p>
-          <ul className="mt-5 space-y-3 text-sm text-white/60">
+          <ul className="mt-5 space-y-2 text-sm">
             {[
               "Set STRIPE_SECRET_KEY on the server",
               "Set STRIPE_PRICE_ID_CREDITS for this pack",
@@ -87,9 +85,10 @@ export default function BillingPage() {
             ].map((item) => (
               <li
                 key={item}
-                className="rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3"
+                className="flex items-start gap-3 rounded-lg bg-[var(--bg-elevated)] border border-[var(--border)] px-3 py-2.5 text-[var(--fg-muted)]"
               >
-                {item}
+                <Check size={14} className="text-[var(--accent)] mt-0.5 shrink-0" />
+                <span>{item}</span>
               </li>
             ))}
           </ul>
@@ -98,4 +97,3 @@ export default function BillingPage() {
     </div>
   );
 }
-

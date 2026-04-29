@@ -32,7 +32,8 @@ export function WhatsAppQrPoller({ pairingId }: Props) {
         try {
           const url = await QRCode.toDataURL(j.qrPayload, {
             margin: 1,
-            width: 260,
+            width: 240,
+            color: { dark: "#0a0a0c", light: "#f5f1e8" },
           });
           if (!cancelled) setDataUrl(url);
         } catch {
@@ -52,14 +53,12 @@ export function WhatsAppQrPoller({ pairingId }: Props) {
   }, [pairingId]);
 
   return (
-    <div className="rounded-[1.5rem] border border-white/10 bg-zinc-950/35 p-4 shadow-inner">
+    <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] p-4">
       {!pairingId ? (
-        <p className="text-sm text-white/55">
-          Start a linking session below.
-        </p>
+        <p className="text-sm text-[var(--fg-dim)]">Start a linking session above.</p>
       ) : (
         <div className="flex flex-col items-center gap-3">
-          <p className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs font-black uppercase tracking-[0.2em] text-white/55">
+          <p className="rounded-full bg-[var(--bg)] border border-[var(--border)] px-3 py-1 text-[10px] uppercase tracking-wider text-[var(--fg-muted)]">
             Status: {status || "starting…"}
           </p>
           {dataUrl && status !== "connected" ? (
@@ -67,27 +66,25 @@ export function WhatsAppQrPoller({ pairingId }: Props) {
             <img
               alt="QR to link WhatsApp"
               src={dataUrl}
-              className="rounded-2xl border border-white/20 bg-white p-2 shadow-2xl"
-              width={260}
-              height={260}
+              className="rounded-lg p-2 bg-[var(--fg)]"
+              width={240}
+              height={240}
             />
           ) : status === "connected" ? (
-            <p className="rounded-2xl border border-emerald-300/20 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">
-              Linked and ready — your assistant will answer new chats when
-              credits allow.
+            <p className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300">
+              Linked and ready — your assistant will reply when credits allow.
             </p>
           ) : (
-            <p className="text-center text-sm text-white/55">
+            <p className="text-center text-sm text-[var(--fg-muted)]">
               Waiting for a QR… keep this page open until the scanner appears.
             </p>
           )}
         </div>
       )}
-      <p className="mt-3 text-[11px] leading-relaxed text-white/40">
-        Use responsibly and in line with WhatsApp terms. Automated messaging
-        can risk account restriction.
+      <p className="mt-3 text-[10px] leading-relaxed text-[var(--fg-dim)]">
+        Use responsibly and in line with WhatsApp terms. Automated messaging can
+        risk account restriction.
       </p>
     </div>
   );
 }
-

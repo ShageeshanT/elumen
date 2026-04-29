@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { WhatsAppQrPoller } from "@/components/dashboard/WhatsAppQrPoller";
+import { Mail, MessageSquare, ArrowUpRight } from "lucide-react";
 
 export default function ConnectionsPage() {
   const [busy, setBusy] = useState<string | null>(null);
@@ -51,77 +52,68 @@ export default function ConnectionsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl space-y-10">
-      <div className="glass-card relative overflow-hidden rounded-[2rem] p-8">
-        <div className="absolute right-10 top-8 h-28 w-28 rounded-full bg-emerald-300/20 blur-xl pulse-glow" />
-        <p className="text-xs font-black uppercase tracking-[0.28em] text-cyan-100">
-          App router
-        </p>
-        <h1 className="mt-4 text-4xl font-black tracking-[-0.04em]">
-          Connections
+    <div className="mx-auto max-w-6xl space-y-6">
+      <section className="surface relative overflow-hidden p-7 sm:p-9">
+        <div className="aurora-bg absolute inset-0 -z-10 opacity-40" />
+        <span className="pill pill-accent mb-4">App router</span>
+        <h1 className="headline text-3xl sm:text-5xl">
+          Connect your tools
         </h1>
-        <p className="mt-3 max-w-2xl text-white/60">
-          Link productivity tools through Composio and connect chat with the
-          guided scan flow. Backend implementation details stay off this
-          screen.
+        <p className="mt-4 max-w-2xl text-[var(--fg-muted)] leading-relaxed">
+          Link the apps you already use. Sign in once and your assistants take it
+          from there — backend details stay tucked away.
         </p>
-      </div>
+      </section>
 
       {message && (
-        <p className="glass-card rounded-2xl px-4 py-3 text-sm text-amber-100">
+        <p className="surface px-4 py-3 text-sm text-amber-300 border-amber-500/30">
           {message}
         </p>
       )}
 
-      <section className="grid gap-6 md:grid-cols-2">
-        <article className="glass-card group relative overflow-hidden rounded-[2rem] p-6 transition hover:-translate-y-1">
-          <div className="absolute inset-0 bg-gradient-to-br from-sky-300/15 to-transparent opacity-70" />
-          <div className="relative space-y-4">
-          <p className="text-xs font-black uppercase tracking-[0.24em] text-sky-100">
-            OAuth
-          </p>
-          <h2 className="text-2xl font-black">Gmail</h2>
-          <p className="text-sm leading-6 text-white/60">
-            OAuth sign-in opens Composio&apos;s hosted authorization. When the
-            toolkit is connected, your assistants can use Gmail during
-            automation once you enable them in the assistant settings.
+      <section className="grid gap-5 md:grid-cols-2">
+        <article className="surface p-7">
+          <span className="grid h-11 w-11 place-items-center rounded-lg bg-rose-500/15 text-rose-400">
+            <Mail size={18} />
+          </span>
+          <h2 className="mt-5 text-xl headline">Gmail</h2>
+          <p className="mt-2 text-sm leading-relaxed text-[var(--fg-muted)]">
+            OAuth sign-in opens Composio&apos;s hosted authorization. Once
+            connected, your assistants can use Gmail during automation.
           </p>
           <button
             type="button"
             disabled={busy === "gmail"}
             onClick={() => void connectGmail()}
-            className="rounded-full bg-white px-5 py-2.5 text-sm font-black text-zinc-950 transition hover:scale-[1.03] disabled:opacity-50"
+            className="btn btn-primary mt-5"
           >
-            {busy === "gmail" ? "Opening…" : "Connect Gmail"}
+            {busy === "gmail" ? "Opening…" : (<>Connect Gmail <ArrowUpRight size={14} /></>)}
           </button>
-          </div>
         </article>
 
-        <article className="glass-card group relative overflow-hidden rounded-[2rem] p-6 transition hover:-translate-y-1">
-          <div className="absolute inset-0 bg-gradient-to-br from-emerald-300/15 via-transparent to-fuchsia-300/15 opacity-80" />
-          <div className="relative space-y-4">
-          <p className="text-xs font-black uppercase tracking-[0.24em] text-emerald-100">
-            Chat
-          </p>
-          <h2 className="text-2xl font-black">Link chat</h2>
-          <p className="text-sm leading-6 text-white/60">
+        <article className="surface p-7">
+          <span className="grid h-11 w-11 place-items-center rounded-lg bg-emerald-500/15 text-emerald-400">
+            <MessageSquare size={18} />
+          </span>
+          <h2 className="mt-5 text-xl headline">Link chat</h2>
+          <p className="mt-2 text-sm leading-relaxed text-[var(--fg-muted)]">
             Start a session, then scan the QR with your phone. Keep the page
-            open while the QR appears; a small worker process pushes updates
-            securely to this dashboard.
+            open while the QR appears; a small worker pushes updates securely
+            here.
           </p>
           <button
             type="button"
             disabled={busy === "whatsapp"}
             onClick={() => void startWhatsApp()}
-            className="glow-button rounded-full bg-gradient-to-r from-emerald-300 via-cyan-300 to-fuchsia-300 px-5 py-2.5 text-sm font-black text-zinc-950 transition hover:scale-[1.03] disabled:opacity-50"
+            className="btn btn-accent mt-5"
           >
-            {busy === "whatsapp" ? "Starting…" : "Start link session"}
+            {busy === "whatsapp" ? "Starting…" : (<>Start link session <ArrowUpRight size={14} /></>)}
           </button>
-          <WhatsAppQrPoller pairingId={pairingId} />
+          <div className="mt-5">
+            <WhatsAppQrPoller pairingId={pairingId} />
           </div>
         </article>
       </section>
     </div>
   );
 }
-

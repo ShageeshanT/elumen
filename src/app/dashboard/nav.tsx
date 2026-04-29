@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { LogOut } from "lucide-react";
 
 export function DashboardNav({ compact }: { compact?: boolean }) {
   const router = useRouter();
@@ -12,13 +13,13 @@ export function DashboardNav({ compact }: { compact?: boolean }) {
 
   if (compact) {
     return (
-      <div className="flex gap-3 text-sm font-bold">
-        <Link className="text-white/75 underline decoration-white/30" href="/dashboard/connections">
+      <div className="flex items-center gap-3 text-sm">
+        <Link className="text-[var(--fg-muted)] hover:text-[var(--fg)]" href="/dashboard/connections">
           Menu
         </Link>
         <button
           type="button"
-          className="text-white/75 underline decoration-white/30"
+          className="text-[var(--fg-muted)] hover:text-[var(--fg)]"
           onClick={() => void logout()}
         >
           Log out
@@ -31,10 +32,10 @@ export function DashboardNav({ compact }: { compact?: boolean }) {
     <button
       type="button"
       onClick={() => void logout()}
-      className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left text-sm font-bold text-white/70 transition hover:bg-white/10 hover:text-white"
+      className="w-full flex items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] px-3 py-2 text-left text-sm text-[var(--fg-muted)] hover:text-[var(--fg)] hover:border-[var(--border-strong)] transition"
     >
+      <LogOut size={14} />
       Log out
     </button>
   );
 }
-

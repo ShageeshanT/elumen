@@ -4,6 +4,7 @@ import { db, schema } from "@/db";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { AgentComposer } from "./ui";
+import { Sparkles, Activity, Wallet } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -24,65 +25,71 @@ export default async function DashboardPage() {
     .where(eq(schema.wallets.tenantId, tenant.tenantId))
     .limit(1);
 
+  const balance = w?.balanceCents ?? 0;
+
   return (
-    <div className="mx-auto max-w-6xl space-y-8">
-      <div className="grid gap-5 lg:grid-cols-[1.4fr_0.6fr]">
-        <section className="glass-card relative overflow-hidden rounded-[2rem] p-8">
-          <div className="absolute right-8 top-8 h-28 w-28 rounded-full bg-cyan-300/25 blur-xl pulse-glow" />
-          <p className="text-xs font-black uppercase tracking-[0.28em] text-cyan-100">
-            Control room
-          </p>
-          <h1 className="mt-4 max-w-2xl text-4xl font-black tracking-[-0.04em] sm:text-5xl">
-            Launch agents, connect tools, and watch credits move.
-          </h1>
-          <p className="mt-4 max-w-xl text-sm leading-6 text-white/60">
-            The dashboard keeps everything product-friendly: assistants,
-            connections, activity, and billing without exposing the backend
-            stack.
-          </p>
-        </section>
-        <section className="glass-card rounded-[2rem] p-6">
-          <p className="text-xs font-black uppercase tracking-[0.24em] text-white/45">
-            Credits available
-          </p>
-          <p className="mt-4 font-mono text-5xl font-black tabular-nums gradient-text">
-            {w?.balanceCents ?? 0}
-          </p>
-          <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/10">
-            <div className="h-full w-3/4 rounded-full bg-gradient-to-r from-cyan-300 via-fuchsia-300 to-amber-200" />
-          </div>
-        </section>
-      </div>
+    <div className="mx-auto max-w-6xl space-y-6">
+      {/* Hero strip */}
+      <section className="surface relative overflow-hidden p-7 sm:p-9">
+        <div className="aurora-bg absolute inset-0 -z-10 opacity-50" />
+        <span className="pill pill-accent mb-4">
+          <Sparkles size={11} /> Control room
+        </span>
+        <h1 className="headline text-3xl sm:text-5xl">
+          Welcome back.
+        </h1>
+        <p className="mt-3 text-[var(--fg-muted)] max-w-xl leading-relaxed">
+          Spin up assistants, link tools, top up credits — everything from one place.
+        </p>
+      </section>
+
+      {/* Stat row */}
+      <section className="grid gap-4 md:grid-cols-3">
+        <Stat icon={<Wallet size={16} />} label="Credits available" value={balance.toLocaleString()} note="Top up in Billing" />
+        <Stat icon={<Activity size={16} />} label="Active assistants" value={agents.filter((a) => a.isActive).length.toString()} note={`${agents.length} total`} />
+        <Stat icon={<Sparkles size={16} />} label="This month" value="—" note="Activity feed coming soon" />
+      </section>
 
       <AgentComposer />
 
       <section className="space-y-3">
         <div className="flex items-end justify-between">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.24em] text-white/40">
+            <p className="text-xs uppercase tracking-wider text-[var(--fg-dim)]">
               Workspace
             </p>
-            <h2 className="text-2xl font-black tracking-tight">Assistants</h2>
+            <h2 className="text-2xl headline">Your assistants</h2>
           </div>
         </div>
         <ul className="grid gap-4 md:grid-cols-2">
           {agents.length === 0 ? (
-            <li className="glass-card rounded-[1.5rem] px-6 py-10 text-center text-sm text-white/55 md:col-span-2">
-              Create your first assistant with the form above — no technical
-              setup exposed here.
+            <li className="surface flex flex-col items-center justify-center gap-2 px-6 py-12 text-center md:col-span-2">
+              <Sparkles size={22} className="text-[var(--accent)]" />
+              <p className="text-sm font-medium">No assistants yet</p>
+              <p className="max-w-sm text-sm text-[var(--fg-muted)]">
+                Create your first assistant with the form above — no technical
+                setup, just plain English.
+              </p>
             </li>
           ) : (
             agents.map((a) => (
-              <li
-                key={a.id}
-                className="glass-card group relative overflow-hidden rounded-[1.5rem] p-5 transition hover:-translate-y-1"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-cyan-300/10 via-transparent to-fuchsia-400/10 opacity-0 transition group-hover:opacity-100" />
-                <div className="relative">
-                  <p className="text-lg font-black">{a.name}</p>
-                  <p className="mt-1 text-sm text-white/55">
-                    Active: {a.isActive ? "yes" : "no"}
-                  </p>
+              <li key={a.id} className="surface p-5 transition hover:border-[var(--border-strong)]">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-base font-medium">{a.name}</p>
+                    <p className="mt-1 text-xs text-[var(--fg-dim)]">
+                      {a.isActive ? "Active" : "Paused"}
+                    </p>
+                  </div>
+                  <span
+                    className={`grid h-8 w-8 place-items-center rounded-md text-base ${
+                      a.isActive
+                        ? "bg-emerald-500/15 text-emerald-400"
+                        : "bg-[var(--bg-elevated)] text-[var(--fg-dim)]"
+                    }`}
+                  >
+                    ✦
+                  </span>
                 </div>
               </li>
             ))
@@ -93,3 +100,24 @@ export default async function DashboardPage() {
   );
 }
 
+function Stat({
+  icon,
+  label,
+  value,
+  note,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  note: string;
+}) {
+  return (
+    <div className="surface p-5">
+      <div className="flex items-center gap-2 text-[var(--fg-dim)] text-xs uppercase tracking-wider">
+        {icon} {label}
+      </div>
+      <p className="mt-3 font-mono text-3xl headline tabular-nums">{value}</p>
+      <p className="mt-2 text-xs text-[var(--fg-muted)]">{note}</p>
+    </div>
+  );
+}

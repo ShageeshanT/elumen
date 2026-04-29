@@ -7,14 +7,17 @@ export function AgentComposer() {
   const router = useRouter();
   const [name, setName] = useState("");
   const [instructions, setInstructions] = useState("");
+  const [saving, setSaving] = useState(false);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    setSaving(true);
     const r = await fetch("/api/agents", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, instructions }),
     });
+    setSaving(false);
     if (r.ok) {
       setName("");
       setInstructions("");
@@ -23,51 +26,45 @@ export function AgentComposer() {
   }
 
   return (
-    <section className="glass-card rounded-[2rem] p-6">
+    <section className="surface p-6 sm:p-7">
       <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-xs font-black uppercase tracking-[0.24em] text-fuchsia-100">
-            Studio
-          </p>
-          <h3 className="mt-2 text-2xl font-black tracking-tight">
-            Create assistant
-          </h3>
+          <span className="pill mb-2">Studio</span>
+          <h3 className="text-2xl headline mt-2">Create an assistant</h3>
         </div>
-        <p className="max-w-sm text-sm text-white/50">
+        <p className="max-w-sm text-sm text-[var(--fg-muted)]">
           Write simple rules. The runtime, model, and tooling stay hidden.
         </p>
       </div>
       <form onSubmit={(e) => void submit(e)} className="mt-6 space-y-4">
-        <label className="block space-y-1 text-sm">
-          <span className="font-semibold text-white/70">Name</span>
+        <label className="block">
+          <span className="mb-1.5 block text-xs font-medium text-[var(--fg-muted)] uppercase tracking-wider">
+            Name
+          </span>
           <input
-            className="w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-white outline-none transition placeholder:text-white/30 focus:border-cyan-200/70 focus:bg-white/15"
+            className="input"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
             placeholder="e.g. Reception bot"
           />
         </label>
-        <label className="block space-y-1 text-sm">
-          <span className="font-semibold text-white/70">
+        <label className="block">
+          <span className="mb-1.5 block text-xs font-medium text-[var(--fg-muted)] uppercase tracking-wider">
             Behaviour & boundaries
           </span>
           <textarea
             rows={5}
-            className="w-full rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-white outline-none transition placeholder:text-white/30 focus:border-fuchsia-200/70 focus:bg-white/15"
+            className="input resize-none"
             value={instructions}
             onChange={(e) => setInstructions(e.target.value)}
             placeholder="Describe tone, escalation, and topics to avoid."
           />
         </label>
-        <button
-          type="submit"
-          className="glow-button rounded-full bg-gradient-to-r from-cyan-300 via-fuchsia-300 to-amber-200 px-7 py-3 text-sm font-black text-zinc-950 transition hover:scale-[1.02]"
-        >
-          Save assistant
+        <button type="submit" disabled={saving} className="btn btn-primary">
+          {saving ? "Saving…" : "Save assistant"}
         </button>
       </form>
     </section>
   );
 }
-
